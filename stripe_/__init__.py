@@ -28,8 +28,8 @@ def checkout_function(domain_url, user_email, quantity):
     #
     # example: 
     client_reference_id=user_email,
-    success_url=domain_url + f"success",
-    cancel_url=domain_url + "cancel",
+    success_url='http://' + domain_url + f"success",
+    cancel_url="http://" + domain_url + "cancel",
     payment_method_types=["card"],
     mode="subscription",
     line_items=[
