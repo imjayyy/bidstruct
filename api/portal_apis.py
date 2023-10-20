@@ -86,7 +86,7 @@ def checkout():
         if quantity:
             user_id = (current_identity.get('_id'))
             user = (users.find_one({"_id" : user_id} ))
-            response = checkout_function(user['email'], quantity)
+            response = checkout_function(request.host, user['email'], quantity)
             return response, 200
         else:
             return jsonify({"error": "Field 'quantity' is missing from the form data."}), 400

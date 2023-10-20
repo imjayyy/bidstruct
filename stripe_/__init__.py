@@ -19,7 +19,7 @@ stripe.api_key = stripe_keys["secret_key"]
 domain_url = 'http://localhost:5000/'
 
 
-def checkout_function(user_email, quantity):
+def checkout_function(domain_url, user_email, quantity):
     checkout_session = stripe.checkout.Session.create(
     # you should get the user id here and pass it along as 'client_reference_id'
     #
