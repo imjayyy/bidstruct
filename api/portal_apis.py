@@ -107,8 +107,9 @@ def addPortalsToProfile():
         profileName = request.form.get('profileName') 
         portalsList = request.form.getlist('portalsList') 
         if profileName and portalsList:
+            message = Profile.add_portals(user_id, profileName, portalsList)
+            return jsonify({"success": message}), 200
 
-            Profile.add_portals(user_id, profileName, portalsList)
         else:
             return jsonify({"error": "Field 'profileName' or 'portalsList' is missing from the form data."}), 400
     else:
