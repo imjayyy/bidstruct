@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_pymongo import PyMongo
 from datetime import timedelta
 from flask_jwt import JWT, jwt_required, current_identity
@@ -9,12 +9,14 @@ from flask_basicauth import BasicAuth
 from flask_admin.contrib.pymongo import ModelView
 
 from models.profile import User
+from flask_cors import CORS
 
 
 app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/Bidstruct'  # Replace with your MongoDB URI
 app.config['MONGODB_SETTINGS'] = {'DB': 'BidStruct'}
 db = PyMongo(app).db
+CORS(app)
 
 # JWT secret key
 app.config['SECRET_KEY'] = 'kjdfaslkdjhfoiwuehfnoeih923keydaw23rfws'
@@ -37,14 +39,37 @@ admin = Admin(app, name='Flask-Admin Example', template_mode='bootstrap3')
 
 @app.route("/")
 def hello_world():
-    return "<p> Welcome to BidStruct APIs..!!! </p>"
+    """
+    Main Page to get List of Routes
+    """
+    array = []
+    for rule in app.url_map.iter_rules():
+
+        methods_ = rule.methods
+        if "OPTIONS" in methods_:
+            methods_.remove("OPTIONS")
+        if "HEAD" in methods_:
+            methods_.remove("HEAD")
+        array.append({
+            "endpoint" : rule.rule, 
+            "Allowed Methods":str(list(methods_)), 
+            "Description" : str(app.view_functions[rule.endpoint].__doc__) } )
+
+    return render_template("routes_table.html", routes = array)
 
 @app.route("/success")
 def success():
+    """
+    Successful checkout redirects here.
+    """
+
     return "Success"
 
 @app.route("/cancel")
 def cancelled():
+    """
+    Unsuccessful checkout redirects here.
+    """
     return "Cancel"
 
 if __name__ == '__main__':

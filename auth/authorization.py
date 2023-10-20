@@ -13,6 +13,9 @@ auth_blueprint = Blueprint('auth', __name__)
 
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
+    """
+    Register User ... Form Data : "email" "password"
+    """
     data = request.get_json()
     email = data['email']
     password = data['password']
@@ -31,6 +34,9 @@ def register():
 
 @auth_blueprint.route('/login', methods=['POST'])
 def login():
+    """
+    Login User ... Form Data : "email" "password"
+    """
     data = request.get_json()
     email = data['email']
     password = data['password']
@@ -61,6 +67,9 @@ def identity(payload):
 @auth_blueprint.route('/protected', methods=['GET'])
 @jwt_required()
 def protected_route():
+    """
+    Test Route for checking logged in users. 
+    """
     user_id = str(current_identity.get('_id'))
     return jsonify({'message': 'This is a protected route for authenticated users.',
                     'user_id': user_id
