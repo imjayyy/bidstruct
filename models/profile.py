@@ -20,7 +20,7 @@ class Profile():
         data = fetch_subscription_data(email)
         profileNameCount = user_profile.count_documents({'user_id': user_id, 'profile_name' : profile_name })
         if profileNameCount > 0:
-            return f"User already has a profile named : {profile_name}, Profile Name must be unique for each user."
+            return f"User already has a profile named : '{profile_name}', Profile Name must be unique."
         
         if data['subscription'] == None:
             return 'You are not subscribed to the any package.'

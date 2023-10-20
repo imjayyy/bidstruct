@@ -105,7 +105,7 @@ def addPortalsToProfile():
 
     if request.form:
         profileName = request.form.get('profileName') 
-        portalsList = request.form.get('portalsList') 
+        portalsList = request.form.getlist('portalsList') 
         if profileName and portalsList:
 
             Profile.add_portals(user_id, profileName, portalsList)
