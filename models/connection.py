@@ -1,6 +1,10 @@
 import pymongo
 
-client = pymongo.MongoClient('localhost:27017')
+# client = pymongo.MongoClient('localhost:27017')
+uri = "mongodb+srv://haithum:87UrsHcu1hyh3Gj5@cluster0.zexhhvh.mongodb.net/?retryWrites=true&w=majority"
+client = pymongo.MongoClient(uri)
+
+
 
 mydb = client['Bidstruct']
 portals = mydb['portals']

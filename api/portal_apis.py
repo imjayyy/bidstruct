@@ -95,6 +95,24 @@ def checkout():
 
 
 
+@portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
+@jwt_required()
+def addPortalsToProfile():
+    """
+    Logged in User, Add Portals to Profile. Form Data : str:"profileName", Array:"portalsList" 
+    """
+    if request.form:
+        profileName = request.form.get('profileName') 
+        portalsList = request.form.get('portalsList') 
+        if profileName and portalsList:
+            Profile.add_portals(profileName, portalsList)
+        else:
+            return jsonify({"error": "Field 'profileName' or 'portalsList' is missing from the form data."}), 400
+    else:
+        return jsonify({"error": "No form data found in the request."}), 400
+
+
+
 @portal_api_blueprint.route("/stripe-webhook", methods=["POST"])
 def stripe_webhook():
     """

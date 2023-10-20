@@ -33,8 +33,8 @@ class Profile():
             
         try:
             profile_portals.delete_many({ "profile_id" : profile_id })
-
-            profile_portals.insert_one({"profile_id": profile_id, "portal_id": portal_id})
+            for portal in portal_id:
+                profile_portals.insert_one({"profile_id": profile_id, "portal_id": portal})
             return ("Portals Added to profile.", True)
         except Exception as e:
             return (e, False)

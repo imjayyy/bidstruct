@@ -11,7 +11,6 @@ from flask_admin.contrib.pymongo import ModelView
 from models.profile import User
 from flask_cors import CORS
 
-
 app = Flask(__name__)
 app.config['MONGO_URI'] = 'mongodb://localhost:27017/Bidstruct'  # Replace with your MongoDB URI
 app.config['MONGODB_SETTINGS'] = {'DB': 'BidStruct'}
