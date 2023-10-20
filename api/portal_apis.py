@@ -101,11 +101,14 @@ def addPortalsToProfile():
     """
     Logged in User, Add Portals to Profile. Form Data : str:"profileName", Array:"portalsList" 
     """
+    user_id = str(current_identity.get('_id'))
+
     if request.form:
         profileName = request.form.get('profileName') 
         portalsList = request.form.get('portalsList') 
         if profileName and portalsList:
-            Profile.add_portals(profileName, portalsList)
+
+            Profile.add_portals(user_id, profileName, portalsList)
         else:
             return jsonify({"error": "Field 'profileName' or 'portalsList' is missing from the form data."}), 400
     else:

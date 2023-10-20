@@ -18,7 +18,10 @@ class Profile():
         count = user_profile.count_documents({ "user_id" : user_id })
 
         data = fetch_subscription_data(email)
-
+        profileNameCount = user_profile.count_documents({'user_id': user_id, 'profile_name' : profile_name })
+        if profileNameCount > 0:
+            return f"User already has a profile named : {profile_name}, Profile Name must be unique for each user."
+        
         if data['subscription'] == None:
             return 'You are not subscribed to the any package.'
         elif count < data['subscription']['quantity'] :
@@ -29,14 +32,20 @@ class Profile():
             return "Profile Added"
         return f"User Already Has {data['subscription']['quantity']} Profiles."
 
-    def add_portals(profile_id, portal_id):            
-        try:
-            profile_portals.delete_many({ "profile_id" : profile_id })
-            for portal in portal_id:
-                profile_portals.insert_one({"profile_id": profile_id, "portal_id": portal})
-            return ("Portals Added to profile.", True)
-        except Exception as e:
-            return (e, False)
+    def add_portals(user_id, profileName, portal_id):            
+        profile_id = user_profile.find_one({'user_id': user_id, 'profile_name' : profileName })
+        if profile_id:
+            try:
+                profile_id = profile_id['_id']
+                profile_portals.delete_many({ "profile_id" : profile_id })
+                for portal in portal_id:
+                    profile_portals.insert_one({"profile_id": profile_id, "portal_id": portal})
+                    
+                return ("Portals Added to profile.", True)
+            except Exception as e:
+                return (e, False)
+        else:
+            return (f"Profile with the name {profileName} Does not Exist, Please create one.", False)
         
     def get_portal_list(profile_id):
         pipeline = [
