@@ -62,14 +62,17 @@ def success():
     Successful checkout redirects here.
     """
 
-    return "Success"
+    return render_template("success.html")
 
 @app.route("/cancel")
 def cancelled():
     """
     Unsuccessful checkout redirects here.
     """
-    return "Cancel"
+    return render_template("cancel.html")
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

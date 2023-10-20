@@ -29,8 +29,7 @@ class Profile():
             return "Profile Added"
         return f"User Already Has {data['subscription']['quantity']} Profiles."
 
-    def add_portals(profile_id, portal_id):
-            
+    def add_portals(profile_id, portal_id):            
         try:
             profile_portals.delete_many({ "profile_id" : profile_id })
             for portal in portal_id:
