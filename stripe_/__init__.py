@@ -5,7 +5,7 @@ from models.connection import stripe_customer
 secret_key = 'sk_test_51KD0MlAESz5yHcF4WSF2htUZGKmOCwWNLsOAd3mzlX4SIGnqkV6839xl1YL2dQPKwMUTVcycFMVcFFGU9EsyPRgV004xGNztBV'
 publishable_key = "pk_test_51KD0MlAESz5yHcF4dVIQJ0u0ZCyRAdvpDB4o1nSjUQOipewZnqHcAyzC4KSgx8wEbbzKpvoLkYOsA3EugX1LGvI200N0maksuc"
 price_id = 'price_1O2JXNAESz5yHcF4AYppHOIv'
-endpoint_secret = 'whsec_NLPOlMKMzH8NBMAYmDNQLihgmHNGkLoE'
+endpoint_secret = 'whsec_804b6db253b77104b53c386ae599d28ba733050a528fde886301824ec6064331'
 
 
 stripe_keys = {
