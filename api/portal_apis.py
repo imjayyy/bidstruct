@@ -57,8 +57,6 @@ def getCatList():
     return data, 200
 
 
-
-
 @portal_api_blueprint.route('/addProfile', methods=['POST'])
 @jwt_required()
 def addProfile():
@@ -116,6 +114,9 @@ def addPortalsToProfile():
             return jsonify({"error": "Field 'profileName' or 'portalsList' is missing from the form data."}), 400
     else:
         return jsonify({"error": "No form data found in the request."}), 400
+
+
+
 
 
 
