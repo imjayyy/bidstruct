@@ -61,8 +61,6 @@ class Profile():
 
         return portals_info
 
-    
-
-
-    def get_():
-        pass
+    def get_users_profiles_list(user_id):
+        p_list = user_profile.find( {"user_id" : user_id} , {"_id" : 0} )
+        return list(p_list)

@@ -60,6 +60,14 @@ def getAvailableStates():
     return list(data), 200
 
 
+@portal_api_blueprint.route('/getUsersProfilesList', methods=['GET'])
+@jwt_required()
+def get_users_profiles_list():
+    user_id = str(current_identity.get('_id'))
+    list__ = Profile.get_users_profiles_list(user_id)
+    return list__, 200
+
+
 @portal_api_blueprint.route('/listPortalsByState', methods=['GET'])
 def listPortalsByState():
     """

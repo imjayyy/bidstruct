@@ -47,7 +47,6 @@ class Portal:
         cursor_data = [record for record in data]
         return jsonify(cursor_data)
 
-
     def get_available_states():
         unique_states = portal_list.distinct("portalState")
         return list(unique_states)
