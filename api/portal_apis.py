@@ -139,8 +139,9 @@ def checkout():
     """
     Logged in User, Stripe Checkout, It returns a checkout URL of Stripe where payment info will be provided by the user. FormData : "quantity"
     """
-    if request.form:
-        quantity = request.form.get('quantity')       
+    data = request.get_json()
+    if data != {} :
+        quantity = data.get('quantity')       
         if quantity:
             user_id = (current_identity.get('_id'))
             user = (users.find_one({"_id" : user_id} ))

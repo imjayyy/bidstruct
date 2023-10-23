@@ -10,10 +10,13 @@ from flask_admin.contrib.pymongo import ModelView
 
 from models.profile import User
 from flask_cors import CORS
+import logging
 
 app = Flask(__name__)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
+
+logging.getLogger('flask_cors').level = logging.DEBUG
 
 # JWT secret key
 app.config['SECRET_KEY'] = 'kjdfaslkdjhfoiwuehfnoeih923keydaw23rfws'
@@ -73,5 +76,5 @@ def cancelled():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
 
