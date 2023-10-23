@@ -13,7 +13,7 @@ from stripe_ import fetch_subscription_data
 
 auth_blueprint = Blueprint('auth', __name__)
 
-CORS(auth_blueprint)
+CORS(auth_blueprint, resources={r"/*": {"origins": "*"}})
 
 @auth_blueprint.route('/register', methods=['POST'])
 def register():

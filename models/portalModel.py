@@ -46,3 +46,12 @@ class Portal:
         data = portal_list.find({} , {'_id' : 0})    
         cursor_data = [record for record in data]
         return jsonify(cursor_data)
+
+
+    def get_available_states():
+        unique_states = portal_list.distinct("portalState")
+        return list(unique_states)
+    
+    def list_portals_by_state(portalState):
+        portals = portal_list.find({"portalState" : portalState}, {"_id" : 0})
+        return(list(portals))

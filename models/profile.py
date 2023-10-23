@@ -39,8 +39,9 @@ class Profile():
             try:
                 profile_id = profile_id['_id']
                 profile_portals.delete_many({ "profile_id" : profile_id })
+                print(portal_id)
                 for portal in portal_id:
-                    profile_portals.insert_one({"profile_id": profile_id, "portal_id": portal})
+                    profile_portals.insert_one({"profile_id": profile_id, "portal_id": str(portal)})
                     
                 return ("Portals Added to profile.", True)
             except Exception as e:
@@ -48,33 +49,20 @@ class Profile():
         else:
             return (f"Profile with the name {profileName} Does not Exist, Please create one.", False)
         
-    def get_portal_list(profile_id):
-        pipeline = [
-            {
-                "$match": {"profile_id": profile_id}
-            },
-            {
-                "$lookup": {
-                    "from": "PortalList",
-                    "localField": "portal_id",
-                    "foreignField": "portalId",
-                    "as": "portals"
-                }
-            },
-            {
-                "$unwind": "$portals"
-            },
-            {
-                "$project": {
-                    "_id": 0,
-                    "portalId": "$portals.portalId",
-                    "portalName": "$portals.portalName",
-                    "portalState": "$portals.portalState"
-                }
-            }
-        ]
-
+    def get_portal_list(profileName, user_id):
+        profile_id = user_profile.find_one({'user_id': user_id, "profile_name" : profileName})['_id']
+        pipeline = [{"$match": {"profile_id": profile_id}},
+                        {"$lookup": {"from": "portalList",
+                                     "localField": "portal_id",
+                                     "foreignField": "portalId",
+                                     "as": "portals"}}]
 
         portals_info = list( profile_portals.aggregate(pipeline) )
 
         return portals_info
+
+    
+
+
+    def get_():
+        pass
