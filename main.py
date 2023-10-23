@@ -21,7 +21,7 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['SECRET_KEY'] = 'kjdfaslkdjhfoiwuehfnoeih923keydaw23rfws'
 
 # JWT expiration time
-app.config['JWT_EXPIRATION_DELTA'] = timedelta(days=3)
+app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=3)
 jwt = JWT(app, authenticate, identity)
 
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
