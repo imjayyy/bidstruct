@@ -8,6 +8,8 @@ from models.connection import users
 from flask import Blueprint, current_app
 from flask_jwt import JWT, jwt_required, current_identity
 from flask_cors import CORS
+from stripe_ import fetch_subscription_data
+
 
 auth_blueprint = Blueprint('auth', __name__)
 
@@ -48,7 +50,8 @@ def login():
 
     if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
         # Generate a JWT token
-        token = jwt.encode({'user_id': str(user['_id']), 'email' : user['email'], 'exp': datetime.utcnow() + current_app.config['JWT_EXPIRATION_DELTA']}, current_app.config['SECRET_KEY'], algorithm='HS256')
+        subscription = fetch_subscription_data(user['email'])
+        token = jwt.encode({'user_id': str(user['_id']), "subscription": subscription,  'email' : user['email'], 'exp': datetime.utcnow() + current_app.config['JWT_EXPIRATION_DELTA']}, current_app.config['SECRET_KEY'], algorithm='HS256')
         return jsonify({'token': token})
 
     return jsonify({'message': 'Invalid credentials'}), 401
