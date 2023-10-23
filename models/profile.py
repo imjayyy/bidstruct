@@ -33,7 +33,8 @@ class Profile():
         return f"User Already Has {data['subscription']['quantity']} Profiles."
 
     def add_portals(user_id, profileName, portal_id):            
-        profile_id = user_profile.find_one({'user_id': user_id, 'profile_name' : profileName })
+        profile_id = user_profile.find_one({'user_id': user_id, "profile_name" : profileName})
+        # return portal_id
         if profile_id:
             try:
                 profile_id = profile_id['_id']

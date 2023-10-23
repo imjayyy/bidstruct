@@ -7,9 +7,11 @@ from models.connection import users
 # auth_blueprint.py
 from flask import Blueprint, current_app
 from flask_jwt import JWT, jwt_required, current_identity
+from flask_cors import CORS
 
 auth_blueprint = Blueprint('auth', __name__)
 
+CORS(auth_blueprint)
 
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
@@ -50,8 +52,6 @@ def login():
         return jsonify({'token': token})
 
     return jsonify({'message': 'Invalid credentials'}), 401
-
-
 
 
 def authenticate(email, password):

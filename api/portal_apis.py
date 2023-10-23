@@ -10,9 +10,11 @@ from models.portalModel import Portal
 from models.profile import Profile
 from stripe_ import checkout_function, stripe_keys, handle_checkout_session, fetch_subscription_data
 import stripe
+from flask_cors import CORS
 
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
+CORS(portal_api_blueprint)
 
 @portal_api_blueprint.route('/getPortalData', methods=['POST'])
 @jwt_required()
