@@ -17,7 +17,7 @@ import json
 
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
-CORS(portal_api_blueprint, resources={r"/*": {"origins": "*"}})
+CORS(portal_api_blueprint)
 
 @portal_api_blueprint.route('/getPortalData', methods=['POST'])
 @jwt_required()
@@ -152,7 +152,12 @@ def checkout():
     else:
         return jsonify({"error": "No form data found in the request."}), 400
 
-
+@portal_api_blueprint.route('/get_subscription_data', methods=['POST'])
+@jwt_required()
+def get_subscription_data():
+    email = str(current_identity.get('email'))
+    context = fetch_subscription_data(email)
+    return context
 
 @portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
 @jwt_required()
