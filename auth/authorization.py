@@ -7,13 +7,13 @@ from models.connection import users
 # auth_blueprint.py
 from flask import Blueprint, current_app
 from flask_jwt import JWT, jwt_required, current_identity
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from stripe_ import fetch_subscription_data
 
 
 auth_blueprint = Blueprint('auth', __name__)
 
-CORS(auth_blueprint)
+CORS(auth_blueprint, support_credentials=True)
 
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
@@ -37,6 +37,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 @auth_blueprint.route('/login', methods=['POST'])
+@cross_origin(supports_credentials=True)
 def login():
     """
     Login User ... Form Data : "email" "password"
