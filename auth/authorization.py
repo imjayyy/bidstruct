@@ -51,7 +51,7 @@ def login():
 
     if user and bcrypt.checkpw(password.encode('utf-8'), user['password']):
         # Generate a JWT token
-        subscription = fetch_subscription_data(user['email'])
+        # subscription = fetch_subscription_data(user['email'])
         token = jwt.encode({    'user_id': str(user['_id']), 
                                 'email' : user['email'], 
                                 'exp': datetime.utcnow() + current_app.config['JWT_EXPIRATION_DELTA']}, 
