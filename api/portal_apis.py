@@ -120,7 +120,7 @@ def getCatList():
 
 @portal_api_blueprint.route('/addProfile', methods=['POST'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
+# @cross_origin(supports_credentials=True)
 def addProfile():
     """
     Logged in User, Add Profile. Form Data : "profileName"
