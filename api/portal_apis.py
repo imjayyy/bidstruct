@@ -139,7 +139,7 @@ def addProfile():
 
 @portal_api_blueprint.route('/checkout', methods=['POST'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
+# @cross_origin(supports_credentials=True)
 def checkout():
     """
     Logged in User, Stripe Checkout, It returns a checkout URL of Stripe where payment info will be provided by the user. FormData : "quantity"
