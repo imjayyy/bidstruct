@@ -126,8 +126,10 @@ def addProfile():
     Logged in User, Add Profile. Form Data : "profileName"
     """
     user_id = str(current_identity.get('_id'))
-    if request.form:
-        profileName = request.form.get('profileName')       
+    data = request.get_json()
+
+    if data != {} :
+        profileName = data.get('profileName')       
         if profileName:
             data = Profile.add_profile(user_id, current_identity.get('email'), profileName)
             return data, 200
