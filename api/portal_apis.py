@@ -127,7 +127,6 @@ def addProfile():
     """
     user_id = str(current_identity.get('_id'))
     data = request.get_json()
-
     if data != {} :
         profileName = data.get('profileName')       
         if profileName:
@@ -161,6 +160,7 @@ def checkout():
 
 @portal_api_blueprint.route('/get_subscription_data', methods=['POST'])
 @jwt_required()
+# @cross_origin(supports_credentials=True)
 def get_subscription_data():
     email = str(current_identity.get('email'))
     context = fetch_subscription_data(email)
