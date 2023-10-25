@@ -14,14 +14,29 @@ from flask_cors import CORS, cross_origin
 from bson import json_util
 import json
 
+from flask_restful import Api
+
 
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
-CORS(portal_api_blueprint, support_credentials=True)
+CORS(portal_api_blueprint)
+api = Api(portal_api_blueprint)
+
+
+@portal_api_blueprint.after_request
+def after_request(response):
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    # response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    # response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    print(request.headers)
+    # print(response.headers)
+    return response
+
+
+
 
 @portal_api_blueprint.route('/getPortalData', methods=['POST'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
 def getPortalData():
     """
     Logged in User, getting Portal Data... 
@@ -63,14 +78,13 @@ def getAvailableStates():
 
 @portal_api_blueprint.route('/getUsersProfilesList', methods=['GET'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
 def get_users_profiles_list():
     """
     Logged In Required: Get All Users Profiles..
     """
     user_id = str(current_identity.get('_id'))
     list__ = Profile.get_users_profiles_list(user_id)
-    return list__, 200
+    return jsonify({"profiles" : list__}), 200
 
 
 @portal_api_blueprint.route('/listPortalsByState', methods=['GET'])
@@ -91,7 +105,7 @@ def listPortalsByState():
 
 @portal_api_blueprint.route('/getProfilePortalList', methods=['GET'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
+
 def getProfilePortalList():
     """
     Getting Portal List for a specific User Profile... Form Data : ["profileName":str]
@@ -120,7 +134,7 @@ def getCatList():
 
 @portal_api_blueprint.route('/addProfile', methods=['POST'])
 @jwt_required()
-# @cross_origin(supports_credentials=True)
+# 
 def addProfile():
     """
     Logged in User, Add Profile. Form Data : "profileName"
@@ -140,7 +154,7 @@ def addProfile():
 
 @portal_api_blueprint.route('/checkout', methods=['POST'])
 @jwt_required()
-# @cross_origin(supports_credentials=True)
+# 
 def checkout():
     """
     Logged in User, Stripe Checkout, It returns a checkout URL of Stripe where payment info will be provided by the user. FormData : "quantity"
@@ -160,7 +174,7 @@ def checkout():
 
 @portal_api_blueprint.route('/get_subscription_data', methods=['POST'])
 @jwt_required()
-# @cross_origin(supports_credentials=True)
+# 
 def get_subscription_data():
     email = str(current_identity.get('email'))
     data = fetch_subscription_data(email)
@@ -170,7 +184,7 @@ def get_subscription_data():
 
 @portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
 @jwt_required()
-@cross_origin(supports_credentials=True)
+
 def addPortalsToProfile():
     """
     Logged in User, Add Portals to Profile. Form Data : str:"profileName", Array:"portalsList" 
@@ -195,7 +209,7 @@ def addPortalsToProfile():
 
 
 @portal_api_blueprint.route("/stripe-webhook", methods=["POST"])
-@cross_origin(supports_credentials=True)
+
 def stripe_webhook():
     """
     Stripe Webhook, Stripe hits this webhook to save user data for a successful checkout.

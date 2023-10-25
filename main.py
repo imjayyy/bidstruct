@@ -14,7 +14,6 @@ import logging
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": "*"}})
 
 logging.getLogger('flask_cors').level = logging.DEBUG
 
@@ -36,6 +35,8 @@ basic_auth = BasicAuth(app)
 
 # Initialize Flask-Admin
 admin = Admin(app, name='Flask-Admin Example', template_mode='bootstrap3')
+
+
 
 @app.route("/")
 def hello_world():

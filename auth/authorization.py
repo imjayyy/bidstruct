@@ -9,11 +9,24 @@ from flask import Blueprint, current_app
 from flask_jwt import JWT, jwt_required, current_identity
 from flask_cors import CORS, cross_origin
 from stripe_ import fetch_subscription_data
+from flask_restful import reqparse, abort, Api, Resource
 
 
 auth_blueprint = Blueprint('auth', __name__)
 
-CORS(auth_blueprint, support_credentials=True)
+CORS(auth_blueprint)
+
+api = Api(auth_blueprint)
+
+
+@auth_blueprint.after_request
+def after_request(response):
+    # response.headers.add('Access-Control-Allow-Origin', '*')
+    # response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    # response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    print(str(response.headers))
+    return response
+
 
 @auth_blueprint.route('/register', methods=['POST'])
 def register():
@@ -37,7 +50,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 @auth_blueprint.route('/login', methods=['POST'])
-@cross_origin(supports_credentials=True)
+# @cross_origin()
 def login():
     """
     Login User ... Form Data : "email" "password"
