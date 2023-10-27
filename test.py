@@ -51,4 +51,32 @@ for item in ls:
 
 print(payload)
 
-ad = ''
+ad = [
+    {'state': 'AL', 
+     'projectName': [
+         {'portalId': '21147', 'portalName': 'Birmingham City Schools'}, 
+         {'portalId': '55902', 'portalName': 'Birmingham-Jefferson County Transit Authority'}]}
+         , 
+    {'state': 'CA', 
+     'projectName': [
+         {'portalId': '24103', 'portalName': 'City of National City'}, 
+         {'portalId': '46106', 'portalName': 'City of Burlingame'}, 
+         {'portalId': '42510', 'portalName': 'City of Vallejo'}, 
+         {'portalId': '39473', 'portalName': 'Contra Costa Transportation Authority'}]}, 
+    {'state': 'FL', 
+     'projectName': [
+         {'portalId': '31333', 'portalName': 'City of Fort Myers'}, 
+         {'portalId': '49083', 'portalName': 'Nassau County'}]}, 
+    {'state': 'TX', 
+     'projectName': [
+         {'portalId': '50907', 'portalName': 'Austin Transit Partnership'}, 
+         {'portalId': '39494', 'portalName': 'Capital Metropolitan Transportation Authority'}, 
+         {'portalId': '44198', 'portalName': 'Ennis Independent School District'}, 
+         {'portalId': '53284', 'portalName': 'City of Grand Prairie'}]}, 
+    {'state': 'IN', 
+     'projectName': [
+         {'portalId': '32621', 'portalName': 'Indianapolis Airport Authority'}]}, 
+    {'state': 'NV', 
+     'projectName': [
+         {'portalId': '48213', 'portalName': 'DOWL / Farr West Engineering'}, 
+         {'portalId': '40669', 'portalName': 'City of Reno'}]}]
