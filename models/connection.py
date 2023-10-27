@@ -9,6 +9,7 @@ client = pymongo.MongoClient(uri)
 mydb = client['Bidstruct']
 portals = mydb['portals']
 users = mydb['users']
+admin = mydb['admin']
 portal_list = mydb['portalList']
 categories = mydb['categories']
 user_profile = mydb['profile']

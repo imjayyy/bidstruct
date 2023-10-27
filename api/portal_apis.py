@@ -20,15 +20,15 @@ from flask_restful import Api
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
 CORS(portal_api_blueprint)
-api = Api(portal_api_blueprint)
 
+api = Api(portal_api_blueprint)
 
 @portal_api_blueprint.after_request
 def after_request(response):
     # response.headers.add('Access-Control-Allow-Origin', '*')
     # response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     # response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    print(request.headers)
+    # print(request.headers)
     # print(response.headers)
     return response
 
@@ -42,6 +42,7 @@ def getPortalData():
     Logged in User, getting Portal Data... 
     """
     data = fetch_subscription_data(current_identity.get('email'))
+    print(data)
     if data['subscription'] == None:
         return jsonify({"error": 'You are not subscribed to the any package.'}), 400
     elif data['product']['active'] == False:
@@ -87,13 +88,18 @@ def get_users_profiles_list():
     return jsonify({"profiles" : list__}), 200
 
 
-@portal_api_blueprint.route('/listPortalsByState', methods=['GET'])
+@portal_api_blueprint.route('/listPortalsByState', methods=['POST'])
+@jwt_required()
 def listPortalsByState():
     """
     Getting Portal List by state... 
+
     """
-    if request.form:
-        portalState = request.form.get('portalState')  
+    # return {'msg':"Hey"}
+    data = request.get_json()
+    print('adwawdawd', data)
+    if data != {} :
+        portalState = data.get('portalState')  
         if portalState:
             data = Portal.list_portals_by_state(portalState)
             return list(data), 200
@@ -103,7 +109,7 @@ def listPortalsByState():
         return jsonify({"error": "No form data found in the request."}), 400
 
 
-@portal_api_blueprint.route('/getProfilePortalList', methods=['GET'])
+@portal_api_blueprint.route('/getProfilePortalList', methods=['POST'])
 @jwt_required()
 
 def getProfilePortalList():
@@ -111,12 +117,32 @@ def getProfilePortalList():
     Getting Portal List for a specific User Profile... Form Data : ["profileName":str]
     """
     user_id = str(current_identity.get('_id'))
-    if request.form:
-        profileName = request.form.get('profileName')  
+    data = request.get_json()
+    if data != {} :
+        profileName = data.get('profileName')  
         if profileName:
             data = Profile.get_portal_list(profileName, user_id)
             data = json.loads(json_util.dumps(data))
-            return jsonify(list(data)), 200
+            payload = []
+            for item in data:
+                template =  {
+                    "state": item['portals'][0]['portalState'],
+                    "projectName": [
+                        {
+                            "portalId": item["portal_id"],
+                            "portalName": item['portals'][0]['portalName']
+                        }
+                    ]
+                }
+                state_found = False
+                for i in payload:
+                    if i['state'] == item['portals'][0]['portalState']:
+                        i['projectName'].append(template['projectName'][0])
+                        state_found = True
+                if not state_found:
+                    payload.append(template)
+
+            return jsonify(payload), 200
         else:
             return jsonify({"error":"profileName field is missing from the form data"}), 400
     else:
@@ -190,10 +216,10 @@ def addPortalsToProfile():
     Logged in User, Add Portals to Profile. Form Data : str:"profileName", Array:"portalsList" 
     """
     user_id = str(current_identity.get('_id'))
-
-    if request.form:
-        profileName = request.form.get('profileName') 
-        portalsList = request.form.getlist('portalsList') 
+    data = request.get_json()
+    if data != {} :
+        profileName = data.get('profileName') 
+        portalsList = data.get('portalsList') 
         if profileName and portalsList:
             message = Profile.add_portals(user_id, profileName, portalsList)
             return jsonify({"success": message}), 200

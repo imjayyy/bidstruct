@@ -79,3 +79,13 @@ def fetch_subscription_data(client_reference_id):
             "product": None,
         }
         return(context)
+
+
+def get_all_customers():
+    list_ = stripe.Subscription.list()
+    return list_
+
+def get_recent_transactions():
+    return stripe.Invoice.list(limit=12)
+
+    

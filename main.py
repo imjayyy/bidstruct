@@ -4,12 +4,9 @@ from datetime import timedelta
 from flask_jwt import JWT, jwt_required, current_identity
 from auth.authorization import authenticate, identity, auth_blueprint
 from api.portal_apis import portal_api_blueprint
-from flask_admin import Admin
-from flask_basicauth import BasicAuth
-from flask_admin.contrib.pymongo import ModelView
 
-from models.profile import User
-from flask_cors import CORS
+from admin.admin import admin_blueprint
+
 import logging
 
 app = Flask(__name__)
@@ -26,15 +23,7 @@ jwt = JWT(app, authenticate, identity)
 
 app.register_blueprint(auth_blueprint, url_prefix='/auth')
 app.register_blueprint(portal_api_blueprint, url_prefix='/api')
-
-
-# Configure basic authentication
-app.config['BASIC_AUTH_USERNAME'] = 'user'
-app.config['BASIC_AUTH_PASSWORD'] = 'pass'
-basic_auth = BasicAuth(app)
-
-# Initialize Flask-Admin
-admin = Admin(app, name='Flask-Admin Example', template_mode='bootstrap3')
+app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 
 
@@ -63,7 +52,7 @@ def success():
     """
     Successful checkout redirects here.
     """
-
+    
     return render_template("success.html")
 
 @app.route("/cancel")
