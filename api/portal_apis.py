@@ -42,21 +42,22 @@ def getPortalData():
     Logged in User, getting Portal Data... 
     """
     data = fetch_subscription_data(current_identity.get('email'))
-    print(data)
     if data['subscription'] == None:
         return jsonify({"error": 'You are not subscribed to the any package.'}), 400
     elif data['product']['active'] == False:
         return jsonify({"error": 'Your package has expired, please resubscribe.'}), 400
 
-    elif request.form:
-        portal_id = request.form.get('portalId') 
-        if portal_id:
-            data = Portal.get_portal_data(portal_id)
-            return data, 200
+    else :
+        data = request.get_json()  
+        if  data != {}:
+            portal_id = data.get('portalId') 
+            if portal_id:
+                data = Portal.get_portal_data(portal_id)
+                return data, 200
+            else:
+                return jsonify({"error": "Field 'portalId' is missing from the form data."}), 400
         else:
-            return jsonify({"error": "Field 'portalId' is missing from the form data."}), 400
-    else:
-        return jsonify({"error": "No form data found in the request."}), 400
+            return jsonify({"error": "No form data found in the request."}), 400
 
 
 @portal_api_blueprint.route('/getPortalList', methods=['GET'])
@@ -97,7 +98,6 @@ def listPortalsByState():
     """
     # return {'msg':"Hey"}
     data = request.get_json()
-    print('adwawdawd', data)
     if data != {} :
         portalState = data.get('portalState')  
         if portalState:

@@ -74,7 +74,7 @@ def dashboard():
     ACTIVE_STATES = len(Portal.get_available_states())    
 
     transactions = get_recent_transactions()["data"]
-    print(transactions[0])
+
     return render_template("/admin/index.html", TOTAL_CUSTOMERS = TOTAL_CUSTOMERS, 
                            TOTAL_PORTALS= TOTAL_PORTALS, ACTIVE_SUBSCRIPTIONS=ACTIVE_SUBSCRIPTIONS, 
                            ACTIVE_STATES = ACTIVE_STATES, transactions=transactions )
