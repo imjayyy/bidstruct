@@ -67,14 +67,23 @@ def register():
 
 
 @admin_blueprint.route('/dashboard', methods=["GET", 'POST'])
+@login_required
 def dashboard():
     TOTAL_CUSTOMERS = users.count_documents({})
     ACTIVE_SUBSCRIPTIONS = len(get_all_customers())
     TOTAL_PORTALS = portal_list.count_documents({})
     ACTIVE_STATES = len(Portal.get_available_states())    
-
     transactions = get_recent_transactions()["data"]
-
+    users_ = stripe_customer.find( {}, {'client_reference_id':1, "customer_details":1 } )
     return render_template("/admin/index.html", TOTAL_CUSTOMERS = TOTAL_CUSTOMERS, 
                            TOTAL_PORTALS= TOTAL_PORTALS, ACTIVE_SUBSCRIPTIONS=ACTIVE_SUBSCRIPTIONS, 
-                           ACTIVE_STATES = ACTIVE_STATES, transactions=transactions )
+                           ACTIVE_STATES = ACTIVE_STATES, transactions=transactions, users = users_ )
+
+
+
+@admin_blueprint.route('/users-view', methods=["GET", 'POST'])
+@login_required
+def users_view():
+
+
+    return render_template("/admin/users.html" )

@@ -111,7 +111,6 @@ def listPortalsByState():
 
 @portal_api_blueprint.route('/getProfilePortalList', methods=['POST'])
 @jwt_required()
-
 def getProfilePortalList():
     """
     Getting Portal List for a specific User Profile... Form Data : ["profileName":str]
@@ -144,8 +143,10 @@ def getProfilePortalList():
 
             return jsonify(payload), 200
         else:
+            print({"error":"profileName field is missing from the form data"})
             return jsonify({"error":"profileName field is missing from the form data"}), 400
     else:
+        print({"error":"No form data found in the request."})
         return jsonify({"error": "No form data found in the request."}), 400
 
 
