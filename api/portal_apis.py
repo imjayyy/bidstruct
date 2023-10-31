@@ -208,7 +208,7 @@ def get_subscription_data():
     email = str(current_identity.get('email'))
     data = fetch_subscription_data(email)
     if data['subscription'] == None:
-        return None, 200
+        return data, 200
     return data, 200
 
 @portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
