@@ -111,14 +111,16 @@ def listPortalsByState():
 
 @portal_api_blueprint.route('/getProfilePortalList', methods=['POST'])
 @jwt_required()
+# @cross_origin
 def getProfilePortalList():
     """
     Getting Portal List for a specific User Profile... Form Data : ["profileName":str]
     """
     user_id = str(current_identity.get('_id'))
     data = request.get_json()
+    print(data)
     if data != {} :
-        profileName = data.get('profileName')  
+        profileName = data.get('profileName').get("profile_name")
         if profileName:
             data = Profile.get_portal_list(profileName, user_id)
             data = json.loads(json_util.dumps(data))
