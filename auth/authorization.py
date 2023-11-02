@@ -29,6 +29,7 @@ def after_request(response):
 
 
 @auth_blueprint.route('/register', methods=['POST'])
+@cross_origin()
 def register():
     """
     Register User ... Form Data : "email" "password"
@@ -50,7 +51,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 @auth_blueprint.route('/login', methods=['POST'])
-# @cross_origin()
+@cross_origin()
 def login():
     """
     Login User ... Form Data : "email" "password"
