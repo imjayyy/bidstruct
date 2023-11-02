@@ -37,7 +37,7 @@ def after_request(response):
 
 @portal_api_blueprint.route('/getPortalData', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 def getPortalData():
     """
     Logged in User, getting Portal Data... 
@@ -81,7 +81,7 @@ def getAvailableStates():
 
 @portal_api_blueprint.route('/getUsersProfilesList', methods=['GET'])
 @jwt_required()
-@cross_origin()
+
 def get_users_profiles_list():
     """
     Logged In Required: Get All Users Profiles..
@@ -93,7 +93,7 @@ def get_users_profiles_list():
 
 @portal_api_blueprint.route('/listPortalsByState', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 def listPortalsByState():
     """
     Getting Portal List by state... 
@@ -114,7 +114,7 @@ def listPortalsByState():
 
 @portal_api_blueprint.route('/getProfilePortalList', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 # @cross_origin
 def getProfilePortalList():
     """
@@ -167,7 +167,7 @@ def getCatList():
 
 @portal_api_blueprint.route('/addProfile', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 # 
 def addProfile():
     """
@@ -188,8 +188,6 @@ def addProfile():
 
 @portal_api_blueprint.route('/checkout', methods=['POST'])
 @jwt_required()
-@cross_origin()
-# 
 def checkout():
     """
     Logged in User, Stripe Checkout, It returns a checkout URL of Stripe where payment info will be provided by the user. FormData : "quantity"
@@ -209,7 +207,7 @@ def checkout():
 
 @portal_api_blueprint.route('/get_subscription_data', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 # 
 def get_subscription_data():
     email = str(current_identity.get('email'))
@@ -220,7 +218,7 @@ def get_subscription_data():
 
 @portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
 @jwt_required()
-@cross_origin()
+
 
 def addPortalsToProfile():
     """
