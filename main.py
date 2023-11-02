@@ -26,6 +26,15 @@ app.register_blueprint(portal_api_blueprint, url_prefix='/api')
 app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 
+@app.before_request 
+def before_request(): 
+    headers = { 'Access-Control-Allow-Origin': '*', 
+               'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 
+               'Access-Control-Allow-Headers': 'Content-Type' } 
+    if request.method == 'OPTIONS' or request.method == 'options': 
+        return jsonify(headers), 200
+
+
 
 @app.route("/")
 def hello_world():
