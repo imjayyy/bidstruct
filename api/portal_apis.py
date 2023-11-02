@@ -19,7 +19,7 @@ from flask_restful import Api
 
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
-CORS(portal_api_blueprint)
+# CORS(portal_api_blueprint)
 
 api = Api(portal_api_blueprint)
 
@@ -126,7 +126,7 @@ def getProfilePortalList():
     if data != {} :
         profileName = data.get('profileName').get("profile_name")
         if profileName:
-            data = Profile.get_portal_list(profileName, user_id)
+            data = Profile.get_portal_list(profileName, user_id)    
             data = json.loads(json_util.dumps(data))
             payload = []
             for item in data:

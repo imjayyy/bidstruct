@@ -14,7 +14,7 @@ from flask_restful import reqparse, abort, Api, Resource
 
 auth_blueprint = Blueprint('auth', __name__)
 
-CORS(auth_blueprint)
+# CORS(auth_blueprint)
 
 api = Api(auth_blueprint)
 
@@ -29,7 +29,7 @@ def after_request(response):
 
 
 @auth_blueprint.route('/register', methods=['POST'])
-@cross_origin()
+# @cross_origin()
 def register():
     """
     Register User ... Form Data : "email" "password"
@@ -51,7 +51,7 @@ def register():
     return jsonify({'message': 'User registered successfully'}), 201
 
 @auth_blueprint.route('/login', methods=['POST'])
-@cross_origin()
+# @cross_origin()
 def login():
     """
     Login User ... Form Data : "email" "password"
