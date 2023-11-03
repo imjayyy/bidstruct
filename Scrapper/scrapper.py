@@ -62,6 +62,7 @@ def get_data(urlPortal):
         new_headers['path'] = f'/papi/bids?bid_type_id=0{codes_search_string}&cid={urlPortal}&dept_id=0&due_date_from=&due_date_to=&keyword=&page={str(page)}&per_page=30&sort_by=&sort_order=-1&stage_id={str(stage_id)}'
         info = s.get(new_url,headers=new_headers).json()
         print(f'Scaping page: {page}')
+
         for bid in info['data']:
             new_dict = bid['attributes']
             new_dict['page_scrape'] = page
@@ -75,10 +76,9 @@ def get_data(urlPortal):
             except:
                 new_dict['estimatedBid'] = 'Not Found'
             new_dict['CategoriesList'] = []
-            for cats in info['included']:    
+            for cats in bid_info['included']:    
                 new_dict['CategoriesList'].append(cats['id'] + ' = ' + cats['categoryName'])
             new_dict['url'] = bid_url
-            print(new_dict)
             final.append(new_dict)
 
         return final
