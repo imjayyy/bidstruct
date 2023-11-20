@@ -28,8 +28,8 @@ def checkout_function(domain_url, user_email, quantity):
     #
     # example: 
     client_reference_id=user_email,
-    success_url="http://localhost:3000/setup-profile",
-    cancel_url="http://" + domain_url + "/cancel",
+    success_url="https://api.bidstruct.com/sucess",
+    cancel_url="https://" + domain_url + "/cancel",
     payment_method_types=["card"],
     mode="subscription",
     line_items=[

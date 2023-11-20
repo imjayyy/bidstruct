@@ -77,7 +77,7 @@ def get_data(urlPortal):
                 new_dict['estimatedBid'] = 'Not Found'
             new_dict['CategoriesList'] = []
             for cats in bid_info['included']:    
-                new_dict['CategoriesList'].append(cats['id'] + ' = ' + cats['attributes']['categoryName'])
+                new_dict['CategoriesList'].append((cats['id'] + ' - ' + cats['attributes']['categoryName']))
             new_dict['url'] = bid_url
             final.append(new_dict)
 
