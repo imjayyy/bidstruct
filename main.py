@@ -38,7 +38,7 @@ def after_request(response):
 @app.route("/")
 def hello_world():
     """
-    Main Page to get List of Routes
+    Main Page to get List of Routes...
     """
     array = []
     for rule in app.url_map.iter_rules():

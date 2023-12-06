@@ -28,7 +28,7 @@ def checkout_function(domain_url, user_email, quantity):
     #
     # example: 
     client_reference_id=user_email,
-    success_url="https://api.bidstruct.com/sucess",
+    success_url="https://" + domain_url + "/sucess",
     cancel_url="https://" + domain_url + "/cancel",
     payment_method_types=["card"],
     mode="subscription",
@@ -51,6 +51,14 @@ def checkout_function(domain_url, user_email, quantity):
                       ]
     )
     return checkout_session
+
+
+def get_products_list():
+    RESPONSE = stripe.Product.search(
+  query="active:'true'",
+)
+    return RESPONSE
+
 
 
 def handle_checkout_session(session):

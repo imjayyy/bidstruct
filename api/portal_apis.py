@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_pymongo import PyMongo, ObjectId
 import bcrypt
 import jwt
@@ -8,7 +8,7 @@ from flask import Blueprint, current_app
 from flask_jwt import JWT, jwt_required, current_identity
 from models.portalModel import Portal
 from models.profile import Profile
-from stripe_ import checkout_function, stripe_keys, handle_checkout_session, fetch_subscription_data
+from stripe_ import checkout_function, stripe_keys, handle_checkout_session, fetch_subscription_data, get_products_list
 import stripe
 from flask_cors import CORS, cross_origin
 from bson import json_util
@@ -241,29 +241,34 @@ def addPortalsToProfile():
 
 
 
+@portal_api_blueprint.route("/get-package-details", methods=["POST"])
+def get_package_details():
+    """ Get package list and description """
+    return make_response(get_products_list(), 200)
+    
+
+
+
+
 
 
 @portal_api_blueprint.route("/stripe-webhook", methods=["POST"])
-
 def stripe_webhook():
     """
     Stripe Webhook, Stripe hits this webhook to save user data for a successful checkout.
     """
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get("Stripe-Signature")
-
     try:
         event = stripe.Webhook.construct_event(
             payload, sig_header, stripe_keys["endpoint_secret"]
         )
-
     except ValueError as e:
         # Invalid payload
         return "Invalid payload", 400
     except stripe.error.SignatureVerificationError as e:
         # Invalid signature
         return "Invalid signature", 400
-
     # Handle the checkout.session.completed event
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
