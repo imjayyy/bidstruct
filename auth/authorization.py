@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_pymongo import PyMongo, ObjectId
 import bcrypt
-import jwt
+# import jwt
 from datetime import datetime, timedelta
 from models.connection import users
 # auth_blueprint.py

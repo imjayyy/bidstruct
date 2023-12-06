@@ -207,8 +207,6 @@ def checkout():
 
 @portal_api_blueprint.route('/get_subscription_data', methods=['POST'])
 @jwt_required()
-
-# 
 def get_subscription_data():
     email = str(current_identity.get('email'))
     data = fetch_subscription_data(email)
@@ -218,8 +216,6 @@ def get_subscription_data():
 
 @portal_api_blueprint.route('/addPortalsToProfile', methods=['POST'])
 @jwt_required()
-
-
 def addPortalsToProfile():
     """
     Logged in User, Add Portals to Profile. Form Data : str:"profileName", Array:"portalsList" 
