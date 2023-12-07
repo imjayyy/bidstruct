@@ -194,14 +194,14 @@ def checkout():
     """
     data = request.get_json()
     if data != {} :
-        quantity = data.get('quantity')       
-        if quantity:
+        price = data.get('price')       
+        if price:
             user_id = (current_identity.get('_id'))
             user = (users.find_one({"_id" : user_id} ))
-            response = checkout_function(request.host, user['email'], quantity)
+            response = checkout_function(request.host, user['email'], price)
             return response, 200
         else:
-            return jsonify({"error": "Field 'quantity' is missing from the form data."}), 400
+            return jsonify({"error": "Field 'price' is missing from the form data."}), 400
     else:
         return jsonify({"error": "No form data found in the request."}), 400
 

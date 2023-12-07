@@ -19,31 +19,19 @@ stripe.api_key = stripe_keys["secret_key"]
 domain_url = 'http://localhost:5000/'
 
 
-def checkout_function(domain_url, user_email, quantity):
+def checkout_function(domain_url, user_email, price):
     checkout_session = stripe.checkout.Session.create(
     client_reference_id=user_email,
-    success_url="https://" + domain_url + "/sucess",
+    success_url="https://" + domain_url + "/success",
     cancel_url="https://" + domain_url + "/cancel",
     payment_method_types=["card"],
     mode="subscription",
     line_items=[
         {
-            "price": stripe_keys["price_id"],
-            "quantity" : quantity
+            "price": price,
+            "quantity" : 1
         }
-    ],
-    custom_fields = [ {'key': "quantity",
-                      "label" : {"custom": quantity, "type" : "custom"},
-                      "type" : "text",
-                      'text': {"maximum_length": None,
-                               "minimum_length": None,
-                            #    "value": str(quantity)
-                                },
-                    "optional" : True                      
-                      }
-                      
-                      ]
-    )
+    ]    )
     return checkout_session
 
 
@@ -68,13 +56,26 @@ def get_products_list():
 def handle_checkout_session(session):
     # here you should fetch the details from the session and save the relevant information
     # to the database (e.g. associate the user with their subscription)
-    stripe_customer.insert_one(session)
+    stripe_customer.update_one({"client_reference_id": session['client_reference_id']}, session, upsert=True)
     print("Subscription was successful.")
 
 
 def fetch_subscription_data(client_reference_id):
-    customer = stripe_customer.find_one({"client_reference_id": client_reference_id})
-
+    # customer = stripe_customer.find_one({"client_reference_id": client_reference_id})
+    customer = stripe_customer.find({"client_reference_id": client_reference_id}).sort()
+    print(len(list(customer)))
+    for i in customer:
+        subscription = stripe.Subscription.retrieve(i['subscription'])
+        product = stripe.Product.retrieve(subscription.plan.product)
+        print(len(list(customer)))
+        
+        context = {
+            "subscription": subscription,
+            "product": product,
+        }
+        print(context)
+        print()
+    return customer
     # if record exists, add the subscription info to the render_template method
     if customer:
         subscription = stripe.Subscription.retrieve(customer['subscription'])
