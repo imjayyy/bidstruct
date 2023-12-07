@@ -14,10 +14,8 @@ from flask_restful import reqparse, abort, Api, Resource
 
 auth_blueprint = Blueprint('auth', __name__)
 
-CORS(auth_blueprint)
-
 api = Api(auth_blueprint)
-
+CORS(auth_blueprint, resources={r"/auth/*": {"origins": "*"}})
 
 @auth_blueprint.after_request
 def after_request(response):

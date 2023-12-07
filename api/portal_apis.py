@@ -19,9 +19,9 @@ from flask_restful import Api
 
 portal_api_blueprint = Blueprint('portal_api', __name__)
 
-CORS(portal_api_blueprint)
 
 api = Api(portal_api_blueprint)
+CORS(portal_api_blueprint, resources={r"/api/*": {"origins": "*"}})
 
 @portal_api_blueprint.after_request
 def after_request(response):
