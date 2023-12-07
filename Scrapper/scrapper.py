@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 
 def get_data(urlPortal):    
     options = webdriver.chrome.options.Options()
-    options.binary_location = "/usr/bin/google-chrome"
+    # options.binary_location = "/usr/bin/google-chrome"
     # options = uc.ChromeOptions()
     options.add_argument("--no-sandbox")
 #    options.add_argument("--disable-setuid-sandbox")

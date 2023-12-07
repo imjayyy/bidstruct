@@ -26,7 +26,7 @@ app.register_blueprint(portal_api_blueprint, url_prefix='/api')
 app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 
-@app.after_request
+@app.before_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
