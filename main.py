@@ -27,7 +27,7 @@ app.register_blueprint(portal_api_blueprint, url_prefix='/api')
 app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 CORS(app)
-
+        
 
 
 @app.route("/")

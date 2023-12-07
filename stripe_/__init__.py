@@ -51,6 +51,16 @@ def get_products_list():
     RESPONSE = stripe.Product.search(
   query="active:'true'",
 )
+    
+    for data in RESPONSE['data']:
+        print(data['default_price'])
+        price_deatils = stripe.Price.retrieve(data['default_price'])
+        data["price_deatils"] = {
+            'unit_amount' : price_deatils['unit_amount'],
+            'unit_amount_decimal' : price_deatils['unit_amount_decimal']
+            }
+
+
     return RESPONSE
 
 
