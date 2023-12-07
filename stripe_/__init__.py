@@ -61,8 +61,8 @@ def handle_checkout_session(session):
 
 
 def fetch_subscription_data(client_reference_id):
-    # customer = stripe_customer.find_one({"client_reference_id": client_reference_id})
-    customer = stripe_customer.find({"client_reference_id": client_reference_id})
+    customer = stripe_customer.find_one({"client_reference_id": client_reference_id})
+    # customer = stripe_customer.find({"client_reference_id": client_reference_id})
 
     # if record exists, add the subscription info to the render_template method
     if customer:
