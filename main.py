@@ -28,13 +28,6 @@ app.register_blueprint(admin_blueprint, url_prefix='/admin')
 
 CORS(app)
 
-# @app.before_request
-# def after_request(response):
-#     response.headers.add('Access-Control-Allow-Origin', '*')
-#     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-#     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-#     print(response.headers)
-#     return response
 
 
 @app.route("/")
