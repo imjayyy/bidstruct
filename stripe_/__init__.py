@@ -56,7 +56,7 @@ def get_products_list():
         print(data['default_price'])
         price_deatils = stripe.Price.retrieve(data['default_price'])
         data["price_deatils"] = {
-            'unit_amount' : str(price_deatils['unit_amount']/100),
+            'unit_amount' : int(price_deatils['unit_amount']/100),
             # 'unit_amount_decimal' : price_deatils['unit_amount_decimal']
             }
 
