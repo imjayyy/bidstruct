@@ -22,7 +22,7 @@ domain_url = 'http://localhost:5000/'
 def checkout_function(domain_url, user_email, price):
     checkout_session = stripe.checkout.Session.create(
     client_reference_id=user_email,
-    success_url="https://" + domain_url + "/success",
+    success_url="https://" + "bidstruct.com" + "/setup-profile",
     cancel_url="https://" + domain_url + "/cancel",
     payment_method_types=["card"],
     mode="subscription",
@@ -56,7 +56,7 @@ def get_products_list():
 def handle_checkout_session(session):
     # here you should fetch the details from the session and save the relevant information
     # to the database (e.g. associate the user with their subscription)
-    stripe_customer.update_one({"client_reference_id": session['client_reference_id']}, session, upsert=True)
+    stripe_customer.update_one({"client_reference_id": session['client_reference_id']}, { '$set': session}, upsert=True)
     print("Subscription was successful.")
 
 
