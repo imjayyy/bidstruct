@@ -58,7 +58,7 @@ class Mailing_Clients():
             msg['To'] = receiver_email
             msg['Subject'] = "Your Weekly Bid Reports.. "
             # msg.attach(attachment)
-            with open('admin\email_template\email_template.html', 'r') as file:
+            with open('admin/email_template/email_template.html', 'r') as file:
                 html_content = file.read()
             msg.attach(MIMEText(html_content, 'html'))
             server.sendmail(sender_email, receiver_email, msg.as_string())
