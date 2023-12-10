@@ -57,7 +57,7 @@ class Mailing_Clients():
             msg['From'] = sender_email
             msg['To'] = receiver_email
             msg['Subject'] = "Your Weekly Bid Reports.. "
-            # msg.attach(attachment)
+            msg.attach(attachment)
             with open('admin/email_template/email_template.html', 'r') as file:
                 html_content = file.read()
             msg.attach(MIMEText(html_content, 'html'))
@@ -90,8 +90,10 @@ class Mailing_Clients():
 
         # Create a DataFrame
         df = pd.DataFrame(flat_portal_data_list)
-        df = df.drop(columns=['categoryIds'])
-
+        try:
+            df = df.drop(columns=['categoryIds'])
+        except:
+            pass
         # Save DataFrame to CSV
         df.to_csv(f"csvs/{email}.csv", index=False)
         self.send_email(email)
@@ -100,5 +102,6 @@ class Mailing_Clients():
     def start_mailing_service(self):
         clients = self.view_all()
         for i,client in enumerate(clients):
-            self.generate_and_send_csv(client['email'], client['portals_list'])
-            print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
+            if i > 42:
+                self.generate_and_send_csv(client['email'], client['portals_list'])
+                print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
