@@ -98,11 +98,11 @@ def mailing_list():
         portals_selected = request.form.getlist('portals')
         name = request.form.get('name')
         email = request.form.get('email')
-        Mailing_Clients.add(name=name, email=email, active=True, portal_list=portals_selected)
+        Mailing_Clients().add(name=name, email=email, active=True, portal_list=portals_selected)
         return url_for('admin.mailing_list')
 
     portals = list(portal_list.find({}, {'_id' : 0}))
-    clients = Mailing_Clients.view_all()
+    clients = Mailing_Clients().view_all()
     print(len(portals))
 
 
