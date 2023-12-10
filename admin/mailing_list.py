@@ -102,6 +102,5 @@ class Mailing_Clients():
     def start_mailing_service(self):
         clients = self.view_all()
         for i,client in enumerate(clients):
-            if i > 42:
-                self.generate_and_send_csv(client['email'], client['portals_list'])
-                print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
+            self.generate_and_send_csv(client['email'], client['portals_list'])
+            print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
