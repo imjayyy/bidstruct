@@ -7,6 +7,8 @@ from functools import wraps
 import bcrypt
 from stripe_ import get_all_customers, get_recent_transactions
 from models.portalModel import Portal
+from .mailing_list import Mailing_Clients
+
 admin_blueprint = Blueprint('admin', __name__, template_folder='templates')
 
 
@@ -87,3 +89,21 @@ def users_view():
 
 
     return render_template("/admin/users.html" )
+
+
+@admin_blueprint.route('/mailing_list', methods=["GET", 'POST'])
+@login_required
+def mailing_list():
+    if request.method == "POST":
+        portals_selected = request.form.getlist('portals')
+        name = request.form.get('name')
+        email = request.form.get('email')
+        Mailing_Clients.add(name=name, email=email, active=True, portal_list=portals_selected)
+        return url_for('admin.mailing_list')
+
+    portals = list(portal_list.find({}, {'_id' : 0}))
+    clients = Mailing_Clients.view_all()
+    print(len(portals))
+
+
+    return render_template("/admin/mailing_list.html", portals = portals, clients = clients, )

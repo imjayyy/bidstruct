@@ -1,150 +1,111 @@
 {% extends "admin/base.html" %} {% block content %}
 
+<div class="container mt-5">
+    <div class="row">
+        <!-- Card 1 - ACTIVE SUBSCRIPTIONS -->
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="bi bi-arrow-up-right-circle fs-3 text-success mb-3"></i>
+                    <h5 class="card-title">ACTIVE SUBSCRIPTIONS</h5>
+                    <p class="card-text">Number of active subscriptions</p>
+                    <p class="card-number" data-to="{{ACTIVE_SUBSCRIPTIONS}}" data-speed="1000">{{ACTIVE_SUBSCRIPTIONS}}</p>
+                </div>
+            </div>
+        </div>
 
-<section id="dashboard">
-	<div class="rows">
-		<div class="status-bar">
-			<ul>
-				<li class="progres">
-					<div class="icon">
-						<img src="../../static/images/icon/progress.png" alt="">
-					</div>
-					<div class="content">
-						<div class="numb" data-from="0" data-to="{{TOTAL_CUSTOMERS}}" data-speed="1000" data-waypoint-active="yes">{{TOTAL_CUSTOMERS}}</div>
-						<div class="text">
-							TOTAL CUSTOMERS
-						</div>
-					</div>
-				</li><!-- /.progres -->
-				<li class="progres">
-					<div class="icon">
-						<img src="../../static/images/icon/task.png" alt="">
-					</div>
-					<div class="content">
-						<div class="numb" data-from="0" data-to="{{TOTAL_PORTALS}}" data-speed="1000" data-waypoint-active="yes">{{TOTAL_PORTALS}}</div>
-						<div class="text">
-							TOTAL PORTALS
-						</div>
-					</div>
-				</li><!-- /.progres -->
-				<li class="progres">
-					<div class="icon">
-						<img src="../../static/images/icon/tick.png" alt="">
-					</div>
-					<div class="content">
-						<div class="numb" data-from="0" data-to="{{ACTIVE_SUBSCRIPTIONS}}" data-speed="1000" data-waypoint-active="yes">{{ACTIVE_SUBSCRIPTIONS}}</div>
-						<div class="text">
-							ACTIVE SUBSCRIPTIONS
-						</div>
-					</div>
-				</li><!-- /.progres -->
-				<li class="progres">
-					<div class="icon">
+        <!-- Card 2 - TOTAL CUSTOMERS -->
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="../../static/images/icon/progress.png" alt="" class="mb-3">
+                    <h5 class="card-title">TOTAL CUSTOMERS</h5>
+                    <p class="card-text">Total number of customers</p>
+                    <p class="card-number" data-to="{{TOTAL_CUSTOMERS}}" data-speed="1000">{{TOTAL_CUSTOMERS}}</p>
+                </div>
+            </div>
+        </div>
 
-						<i class="zmdi zmdi-pin-drop mdc-text-light-blue zmdi-hc-3x"></i>
+        <!-- Card 3 - TOTAL PORTALS -->
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <img src="../../static/images/icon/task.png" alt="" class="mb-3">
+                    <h5 class="card-title">TOTAL PORTALS</h5>
+                    <p class="card-text">Total number of portals</p>
+                    <p class="card-number" data-to="{{TOTAL_PORTALS}}" data-speed="1000">{{TOTAL_PORTALS}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-					</div>
-					<div class="content">
-						<div class="numb" data-from="0" data-to="{{ACTIVE_STATES}}" data-speed="1000" data-waypoint-active="yes">{{ACTIVE_STATES}}</div>
-						<div class="text">
-							ACTIVE STATES
-						</div>
-					</div>
-				</li>
-				<!-- /.progres -->
-			</ul>
-		</div><!-- /.status-bar -->
-	</div><!-- /.rows -->
-	<div class="rows">
-		<div class="box box-project" style="width: 100%;">
-			<div class="box-header with-border" style="width: 100%;">
-				<div class="box-title" >
-					<h3>RECENT INVOICES</h3>
-					
-				</div>
-				  <!-- /.box-tools pull-right -->
-				  <div class="clearfix"></div>
-			</div><!-- /.box-header -->
-			<div class="box-content" style="width: 100%;">
-				<table class="table"  style="width: 100%;" >
-					<thead>
-						<tr>
-							<th>Customer Email</th>
-							<th>Customer Name</th>
-							<th>Amount Due</th>
-							<th>Amount Paid</th>
-							<th>currency</th>			            				
-							<th>Invoice </th>
-						</tr>
-					</thead>
-					<tbody>
-						{% for data in transactions %}
 
-						<tr>
-					
-							<td>{{data["customer_email"]}}</td>
-							<td>{{data["customer_name"]}}</td>
-							<td>{{data["amount_due"]/100}}</td>
-							<td>{{data["amount_paid"]/100}}</td>
-							<td>{{data["currency"]}}</td>
+<section class="container mt-5">
 
-							<td> <a href="{{data['invoice_pdf']}} "><button> View Invoice </button></a></td>
-							
-						</tr>
+            <div class="box">
+                <div class="box-header">
+                    <h3>RECENT INVOICES</h3>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Customer Email</th>
+                                <th>Customer Name</th>
+                                <th>Amount Due</th>
+                                <th>Amount Paid</th>
+                                <th>Currency</th>
+                                <th>Invoice</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in transactions %}
+                            <tr>
+                                <td>{{data["customer_email"]}}</td>
+                                <td>{{data["customer_name"]}}</td>
+                                <td>{{data["amount_due"]/100}}</td>
+                                <td>{{data["amount_paid"]/100}}</td>
+                                <td>{{data["currency"]}}</td>
+                                <td><a href="{{data['invoice_pdf']}}"><button class="btn btn-primary">View Invoice</button></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+</section>
 
-						{% endfor %}
-														
-					</tbody>
-				</table><!-- /.scroll -->
-			</div><!-- /.box-content -->
-		</div><!-- /.box box-project -->
-
-		<div class="clearfix"></div>
-	</div><!-- /.rows -->
-</section><!-- /#dashboard -->
-
-<section id="users">
-
-	<div class="rows">
-		<div class="box box-project" style="width: 100%;">
-			<div class="box-header with-border" style="width: 100%;">
-				<div class="box-title" >
-					<h3>Users</h3>
-					
-				</div>
-				  <!-- /.box-tools pull-right -->
-				  <div class="clearfix"></div>
-			</div><!-- /.box-header -->
-			<div class="box-content" style="width: 100%;">
-				<table class="table"  style="width: 100%;" >
-					<thead>
-						<tr>
-							<th>Reference Email</th>
-							<th>Name</th>
-							<th>Email</th>
-
-						</tr>
-					</thead>
-					<tbody>
-						{% for data in users %}
-
-						<tr>
-					
-							<td>{{data["client_reference_id"]}}</td>
-							<td>{{data["customer_details"]["name"]  }}</td>
-							<td>{{data["customer_details"]["email"]  }}</td>
-							
-						</tr>
-
-						{% endfor %}
-														
-					</tbody>
-				</table><!-- /.scroll -->
-			</div><!-- /.box-content -->
-		</div><!-- /.box box-project -->
-
-		<div class="clearfix"></div>
-	</div><!-- /.rows -->
-</section><!-- /#dashboard -->
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Users</h3>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Reference Email</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in users %}
+                            <tr>
+                                <td>{{data["client_reference_id"]}}</td>
+                                <td>{{data["customer_details"]["name"]}}</td>
+                                <td>{{data["customer_details"]["email"]}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 {% endblock %}
