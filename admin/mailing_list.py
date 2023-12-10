@@ -78,8 +78,10 @@ class Mailing_Clients():
     def generate_and_send_csv(self, email, portals_list):
         portal_list = []
         for x in portals_list:
-            portal_list.append(x['portalId'])
-
+            try:
+                portal_list.append(x['portalId'])
+            except:
+                pass
         cursor = portals.find({'portal' : {'$in' : portal_list }})
 
         portal_data_list = [doc["portal_data"] for doc in cursor]
