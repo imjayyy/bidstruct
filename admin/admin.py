@@ -86,8 +86,6 @@ def dashboard():
 @admin_blueprint.route('/users-view', methods=["GET", 'POST'])
 @login_required
 def users_view():
-
-
     return render_template("/admin/users.html" )
 
 
@@ -100,10 +98,7 @@ def mailing_list():
         email = request.form.get('email')
         Mailing_Clients().add(name=name, email=email, active=True, portal_list=portals_selected)
         return url_for('admin.mailing_list')
-
     portals = list(portal_list.find({}, {'_id' : 0}))
     clients = Mailing_Clients().view_all()
-    print(len(portals))
-
 
     return render_template("/admin/mailing_list.html", portals = portals, clients = clients, )

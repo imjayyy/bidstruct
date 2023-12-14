@@ -8,7 +8,7 @@ from email.mime.application import MIMEApplication
 from models.portalModel import Portal
 from datetime import datetime
 import pandas as pd
-
+from flask import render_template
 
 
 mailing_clients = mydb['mailingClients'] 
@@ -22,10 +22,12 @@ sender_email = "bids@constructionbidreports.com"  # Enter your address
 # receiver_email = "your@gmail.com"  # Enter receiver address
 # password = "Checkmate1!"
 password = "Checkmate1!"
-message = """\
+message = """
 Subject: Hi there
 
-This message is sent from Python."""
+This message is sent from Python.
+
+"""
 
 
 
@@ -98,9 +100,37 @@ class Mailing_Clients():
         df.to_csv(f"csvs/{email}.csv", index=False)
         self.send_email(email)
 
-
     def start_mailing_service(self):
         clients = self.view_all()
         for i,client in enumerate(clients):
             self.generate_and_send_csv(client['email'], client['portals_list'])
             print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
+
+
+    def send_password_reset_email(self, receiver_email, new_password):        
+        context = ssl.create_default_context()    
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = receiver_email
+            msg['Subject'] = "BidStruct: Your Password Has Been Reset."
+            # with open('admin/email_template/email_template_password_reset.html', 'r') as file:
+            html_content = render_template('email_template/email_template_password_reset.html', password = new_password)
+                # html_content = file.read()
+            msg.attach(MIMEText(html_content, 'html'))
+            server.sendmail(sender_email, receiver_email, msg.as_string())
+
+    def send_confirmation_email(self, receiver_email, confirmation_link):        
+        context = ssl.create_default_context()    
+        with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
+            server.login(sender_email, password)
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = receiver_email
+            msg['Subject'] = "BidStruct: Email Confirmation."
+            # with open('admin/email_template/email_template_password_reset.html', 'r') as file:
+            html_content = render_template('email_template/confirmation_mail.html', confirmation_link = confirmation_link)
+                # html_content = file.read()
+            msg.attach(MIMEText(html_content, 'html'))
+            server.sendmail(sender_email, receiver_email, msg.as_string())

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for, flash
 from flask_pymongo import PyMongo, ObjectId
 import bcrypt
 import jwt
@@ -10,6 +10,12 @@ from flask_jwt import JWT, jwt_required, current_identity
 from flask_cors import CORS, cross_origin
 from stripe_ import fetch_subscription_data
 from flask_restful import reqparse, abort, Api, Resource
+import random
+import string
+from admin.mailing_list import Mailing_Clients
+
+
+
 
 
 auth_blueprint = Blueprint('auth', __name__)
@@ -34,19 +40,63 @@ def register():
     """
     data = request.get_json()
     email = data['email']
-    password = data['password']
-
-    # Check if the email is already in use
     if users.find_one({'email': email}):
         return jsonify({'message': 'Email already exists'}), 400
+    payload = {
+        'email': email,
+        'exp': datetime.utcnow() + timedelta(hours=24)  # Token expires in 24 hours
+    }
+    token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+    confirmation_link = f'https://api.bidstruct.com/auth/confirm-email?token={token}'
 
-    # Hash the password
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    Mailing_Clients().send_confirmation_email(email, confirmation_link)
+    # password = data['password']
 
-    # Insert the user into the database
-    user_id = users.insert_one({'email': email, 'password': hashed_password})
+    # # Check if the email is already in use
+
+
+    # # Hash the password
+    # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    # # Insert the user into the database
+    # user_id = users.insert_one({'email': email, 'password': hashed_password})
     
-    return jsonify({'message': 'User registered successfully'}), 201
+    return jsonify({'message': 'Confirmation link sent to email'}), 201
+
+
+
+@auth_blueprint.route('/confirm-email', methods=['GET', 'POST'])
+def confirm():
+    token = request.args.get('token')
+    if not token:
+        flash('Token is missing/expired.', 'error')
+        return render_template('email_template/set_password.html', new_user = True,  token = token)
+    payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+    email = payload['email']
+    user_ = users.find_one({'email' : email})
+    if not user_ :
+        if request.method == 'POST':
+            password = request.form.get('password')
+            token = request.form.get('token')
+            try:
+                payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+                hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                user_id = users.insert_one( {'email': email,'password':hashed_password} )
+                flash('SignUp Successful. Please log in now.', 'error')
+
+                return redirect("https://bidstruct.com/?modal=true&type=signin")
+            except:
+                flash('Error submitting form. Please try again.', 'error')
+                return redirect(url_for('auth.confirm'))
+
+        return render_template('email_template/set_password.html', new_user = True,  token = token)
+
+
+    else:
+        flash('Please sign up again, the account already exists or the token is expired.', 'error')
+        return redirect(url_for('auth.confirm'))
+
+
 
 @auth_blueprint.route('/login', methods=['POST'])
 # @cross_origin()
@@ -71,6 +121,55 @@ def login():
         return jsonify({'token': token})
 
     return jsonify({'message': 'Invalid credentials'}), 401
+
+
+
+@auth_blueprint.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    """ Forgot Password method --> Form Data : 'email' """
+    data = request.get_json()
+    email = data['email']
+    user = users.find_one({'email': email})
+    if user:
+        payload = {
+            'email': email,
+            'exp': datetime.utcnow() + timedelta(hours=24)  # Token expires in 24 hours
+        }
+        token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
+        confirmation_link = f'https://api.bidstruct.com/auth/change-pass?token={token}'
+        Mailing_Clients().send_password_reset_email(email)
+        return jsonify({'success' : 'Email has been sent to your email address.'}), 200
+    else:
+        return jsonify({'error' : 'Email does not exist'}), 400
+
+
+@auth_blueprint.route('/change-pass', methods=['GET', 'POST'])
+def change_pass():
+    token = request.args.get('token')
+    if not token:
+        flash('Token is missing/expired.', 'error')
+        return render_template('email_template/set_password.html', new_user = True,  token = token)
+    payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+    email = payload['email']
+    user_ = users.find_one({'email' : email})
+    if user_ :
+        if request.method == 'POST':
+            password = request.form.get('password')
+            token = request.form.get('token')
+            try:
+                payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+                hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+                user_id = users.update_one( {'email': email},{ '$set' : {'password':hashed_password}} )
+                flash('SignUp Successful. Please log in now.', 'error')
+                return redirect("https://bidstruct.com/?modal=true&type=signin")
+            except:
+                flash('Error submitting form. Please try again.', 'error')
+                return redirect(url_for('auth.confirm'))
+    flash("The account does not exist.", 'error')
+    return render_template('email_template/set_password.html', new_user = True,  token = token)
+
+
+
 
 
 def authenticate(email, password):
