@@ -128,7 +128,11 @@ def login():
 def forgot_password():
     """ Forgot Password method --> Form Data : 'email' """
     data = request.get_json()
-    email = data['email']
+    try:
+        email = data['email']
+    except:
+        return jsonify({'message' : 'Please provide with your email address.'}), 200
+
     user = users.find_one({'email': email})
     if user:
         payload = {
@@ -137,14 +141,15 @@ def forgot_password():
         }
         token = jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256')
         confirmation_link = f'https://api.bidstruct.com/auth/change-pass?token={token}'
-        Mailing_Clients().send_password_reset_email(email)
-        return jsonify({'success' : 'Email has been sent to your email address.'}), 200
+        Mailing_Clients().send_password_reset_email(email, confirmation_link)
+        return jsonify({'message' : 'Email has been sent to your email address.'}), 200
     else:
         return jsonify({'error' : 'Email does not exist'}), 400
 
 
 @auth_blueprint.route('/change-pass', methods=['GET', 'POST'])
 def change_pass():
+    """ Page generated from backend  """
     token = request.args.get('token')
     if not token:
         flash('Token is missing/expired.', 'error')

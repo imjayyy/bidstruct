@@ -107,7 +107,7 @@ class Mailing_Clients():
             print(i, client['email'], 'email sent @ : ', datetime.now().strftime("%d/%m/%Y, %H:%M:%S") )
 
 
-    def send_password_reset_email(self, receiver_email, new_password):        
+    def send_password_reset_email(self, receiver_email, link):        
         context = ssl.create_default_context()    
         with smtplib.SMTP_SSL(smtp_server, port, context=context) as server:
             server.login(sender_email, password)
@@ -116,7 +116,7 @@ class Mailing_Clients():
             msg['To'] = receiver_email
             msg['Subject'] = "BidStruct: Your Password Has Been Reset."
             # with open('admin/email_template/email_template_password_reset.html', 'r') as file:
-            html_content = render_template('email_template/email_template_password_reset.html', password = new_password)
+            html_content = render_template('email_template/email_template_password_reset.html', password = link)
                 # html_content = file.read()
             msg.attach(MIMEText(html_content, 'html'))
             server.sendmail(sender_email, receiver_email, msg.as_string())
