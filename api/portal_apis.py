@@ -25,10 +25,9 @@ CORS(portal_api_blueprint, resources={r"/api/*": {"origins": "*"}})
 
 @portal_api_blueprint.after_request
 def after_request(response):
-    # response.headers.add('Access-Control-Allow-Origin', '*')
-    # response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    # response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
-    # print(request.headers)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     # print(response.headers)
     return response
 
@@ -167,8 +166,6 @@ def getCatList():
 
 @portal_api_blueprint.route('/addProfile', methods=['POST'])
 @jwt_required()
-
-# 
 def addProfile():
     """
     Logged in User, Add Profile. Form Data : "profileName"
@@ -276,3 +273,37 @@ def stripe_webhook():
     return "Success", 200
 
 
+@portal_api_blueprint.route('/add-to-favorite', methods=['POST'])
+@jwt_required()
+def addToFavorite():
+    """
+    Add a bid to favorites..
+    """
+    data = request.get_json()
+    user_id = str(current_identity.get('_id'))
+    list__ = Profile.add_to_favorite(user_id, data)
+    return jsonify({"message" : 'Bid added to favorites'}), 200
+
+
+@portal_api_blueprint.route('/view-favorites', methods=['POST'])
+@jwt_required()
+def viewFavorites():
+    """
+    Get favorite bids..
+    """
+
+    user_id = str(current_identity.get('_id'))
+    list__ = Profile.get_favorites(user_id)
+    return jsonify({"data" : list__}), 200
+
+
+@portal_api_blueprint.route('/delete-favorites', methods=['POST'])
+@jwt_required()
+def deleteFavorites():
+    """
+    Delete a favorite bid..
+    """
+    data = request.get_json()
+    user_id = str(current_identity.get('_id'))
+    Profile.delete_from_favorite(user_id, data)
+    return jsonify({"message" : "Bid Deleted"}), 200

@@ -27,7 +27,7 @@ CORS(auth_blueprint, resources={r"/auth/*": {"origins": "*"}})
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     print(str(response.headers))
     return response
 
@@ -128,6 +128,7 @@ def login():
 def forgot_password():
     """ Forgot Password method --> Form Data : 'email' """
     data = request.get_json()
+    print(data)
     try:
         email = data['email']
     except:
@@ -149,7 +150,7 @@ def forgot_password():
 
 @auth_blueprint.route('/change-pass', methods=['GET', 'POST'])
 def change_pass():
-    """ Page generated from backend  """
+    """ Page generated from backend to change password """
     token = request.args.get('token')
     if not token:
         flash('Token is missing/expired.', 'error')
