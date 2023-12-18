@@ -297,7 +297,7 @@ def viewFavorites():
     return jsonify({"data" : list__}), 200
 
 
-@portal_api_blueprint.route('/delete-favorites', methods=['POST'])
+@portal_api_blueprint.route('/delete-favorite', methods=['POST'])
 @jwt_required()
 def deleteFavorites():
     """

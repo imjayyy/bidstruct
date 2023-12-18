@@ -78,5 +78,6 @@ class Profile():
         return list(resp)
     
     def delete_from_favorite(user_id, data):
-        resp = favorite_bids.delete_one({'bidId': data['bidId'] , 'user_id' : user_id } )
+        print(user_id, data)
+        resp = favorite_bids.delete_one({'bidId': data , 'user_id' : user_id } )        
         return resp
