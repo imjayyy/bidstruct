@@ -87,7 +87,10 @@ def get_users_profiles_list():
     """
     user_id = str(current_identity.get('_id'))
     list__ = Profile.get_users_profiles_list(user_id)
-    return jsonify({"profiles" : list__}), 200
+    if len(list__) != 0:
+        return jsonify({"profiles" : list__}), 200
+    else:
+        return jsonify({"message" : "User has no profiles"}), 400
 
 
 @portal_api_blueprint.route('/listPortalsByState', methods=['POST'])
