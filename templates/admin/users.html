@@ -1,10 +1,125 @@
 {% extends "admin/base.html" %} {% block content %}
 
+<style>
 
-<section id="users">
 
-	
-</section><!-- /#dashboard -->
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        cursor: pointer;
+        border: none;
+    }
+</style>
+<section class="container mt-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3>Users</h3>
+                </div>
+                <div class="box-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Number of Profiles</th>
+                                <th>Profiles List</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in users %}
+                            <tr>
+                                <td>{{data["email"]}}</td>
+                                <td>{{data["profiles"] | length}}</td>
+                                <td>
+                                    {% if  data["profiles"] | length > 0 %}
+                                    <button class="btn btn-primary" onclick='openModal("{{data['email']}}")'>View Profiles</button>
+
+                                    <div class="modal" id='{{data["email"]}}'>
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                            
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Profiles List</h4>
+                                                    <button type="button" class="close-btn" data-dismiss="modal" onclick='closeModal("{{data['email']}}")'>&times;</button>
+                                                </div>
+                                                
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                        <ul>
+                                                            {% for prof in data["profiles"] %}                                                                
+                                                                <li> {{ prof['profile_name'] }}</li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                    
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {% endif %}
+                                    
+                                    
+                                    
+
+                                </td>
+
+                                
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    function openModal(_id) {
+        var modal = document.getElementById(_id);
+        modal.style.display = "flex";
+    }
+
+    function closeModal(_id) {
+        var modal = document.getElementById(_id);
+        modal.style.display = "none";
+    }
+
+    // Close the modal if the user clicks outside of it
+    window.onclick = function(event) {
+        var modal = document.getElementById(_id);
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    };
+</script>
 
 
 {% endblock %}

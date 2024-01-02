@@ -78,9 +78,8 @@ def getAvailableStates():
     return list(data), 200
 
 
-@portal_api_blueprint.route('/getUsersProfilesList', methods=['GET'])
+@portal_api_blueprint.route('/getUsersProfilesList', methods=['POST'])
 @jwt_required()
-
 def get_users_profiles_list():
     """
     Logged In Required: Get All Users Profiles..

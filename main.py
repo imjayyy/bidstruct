@@ -55,8 +55,8 @@ def success():
     """
     Successful checkout redirects here.
     """
-    
     return render_template("success.html")
+
 
 @app.route("/cancel")
 def cancelled():

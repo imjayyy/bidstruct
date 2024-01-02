@@ -76,17 +76,34 @@ def dashboard():
     TOTAL_PORTALS = portal_list.count_documents({})
     ACTIVE_STATES = len(Portal.get_available_states())    
     transactions = get_recent_transactions()["data"]
-    users_ = stripe_customer.find( {}, {'client_reference_id':1, "customer_details":1 } )
     return render_template("/admin/index.html", TOTAL_CUSTOMERS = TOTAL_CUSTOMERS, 
                            TOTAL_PORTALS= TOTAL_PORTALS, ACTIVE_SUBSCRIPTIONS=ACTIVE_SUBSCRIPTIONS, 
-                           ACTIVE_STATES = ACTIVE_STATES, transactions=transactions, users = users_ )
+                           ACTIVE_STATES = ACTIVE_STATES, transactions=transactions, )
 
 
 
-@admin_blueprint.route('/users-view', methods=["GET", 'POST'])
+@admin_blueprint.route('/users', methods=["GET", 'POST'])
 @login_required
 def users_view():
-    return render_template("/admin/users.html" )
+
+    pipeline = [
+        {
+            '$lookup': {
+                'from': 'profile',
+                'let': {'user_id_str': {'$toString': '$_id'}},
+                'pipeline': [
+                    {'$match': {'$expr': {'$eq': ['$user_id', '$$user_id_str']}}}
+                ],
+                'as': 'profiles'
+            }
+        }
+    ]
+
+    # Execute the aggregation pipeline
+    result = users.aggregate(pipeline)
+    # users_ = stripe_customer.find( {}, {'client_reference_id':1, "customer_details":1 } )
+
+    return render_template("/admin/users.html", users = result )
 
 
 @admin_blueprint.route('/mailing_list', methods=["GET", 'POST'])
