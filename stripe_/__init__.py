@@ -3,7 +3,9 @@ import stripe
 from models.connection import stripe_customer 
 
 secret_key = 'sk_test_51KD0MlAESz5yHcF4WSF2htUZGKmOCwWNLsOAd3mzlX4SIGnqkV6839xl1YL2dQPKwMUTVcycFMVcFFGU9EsyPRgV004xGNztBV'
+secret_key = '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'
 publishable_key = "pk_test_51KD0MlAESz5yHcF4dVIQJ0u0ZCyRAdvpDB4o1nSjUQOipewZnqHcAyzC4KSgx8wEbbzKpvoLkYOsA3EugX1LGvI200N0maksuc"
+publishable_key = 'pk_live_51KD0MlAESz5yHcF48D7GXcmgTSwY6rU6VkKOCiV5FkuTwrVISucC5CxP9h0PLvyR77vwbL3sqYQ2rRQ7FUAJEEc10030hCN5xs'
 price_id = 'price_1O2JXNAESz5yHcF4AYppHOIv'
 endpoint_secret = 'whsec_NLPOlMKMzH8NBMAYmDNQLihgmHNGkLoE'
 
@@ -39,17 +41,17 @@ def get_products_list():
     RESPONSE = stripe.Product.search(
   query="active:'true'",
 )
-    
+    my_products = {'data' : [] }
     for data in RESPONSE['data']:
-        print(data['default_price'])
-        price_deatils = stripe.Price.retrieve(data['default_price'])
-        data["price_deatils"] = {
-            'unit_amount' : int(price_deatils['unit_amount']/100),
-            # 'unit_amount_decimal' : price_deatils['unit_amount_decimal']
-            }
+        if data['id'] in ['prod_PExRPKT6XWFIQK', 'prod_PExRYTy6eqt4V6', 'prod_PExRhPphMvqppB']:
+            price_deatils = stripe.Price.retrieve(data['default_price'])
+            data["price_deatils"] = {
+                'unit_amount' : int(price_deatils['unit_amount']/100),
+                # 'unit_amount_decimal' : price_deatils['unit_amount_decimal']
+                }
+            my_products['data'].append(data)
 
-
-    return RESPONSE
+    return my_products
 
 
 
